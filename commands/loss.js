@@ -7,6 +7,7 @@ module.exports = {
     description: "Adds a Loss to the Members score!",
     minArgs: 1,
     maxArgs: 1,
+    permissions: ['MANAGE_MESSAGES'],
     expectedArgs: "<@user>",
     callback: async (message) => {
 
@@ -21,8 +22,9 @@ module.exports = {
 
         const guildId = message.guild.id
         const userId = target
+        const number = 1
 
-        const totalLoss = await tally.addLoss(guildId, userId)
+        const totalLoss = await tally.addLoss(guildId, userId, number)
 
             const lossEmbed = new Discord.MessageEmbed()
             .setTitle('You Lost!')

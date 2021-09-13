@@ -7,6 +7,7 @@ module.exports = {
     description: "Adds a Win to the Members score!",
     minArgs: 1,
     maxArgs: 1,
+    permissions: ['MANAGE_MESSAGES'],
     expectedArgs: "<@user>",
     callback: async (message) => {
 
@@ -21,8 +22,9 @@ module.exports = {
 
         const guildId = message.guild.id
         const userId = target
+        const number = 1
 
-        const totalWin = await tally.addWin(guildId, userId)
+        const totalWin = await tally.addWin(guildId, userId, number)
 
             const winEmbed = new Discord.MessageEmbed()
             .setTitle('You Won!')

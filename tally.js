@@ -2,7 +2,7 @@ const profileSchema = require('./schema/score-data')
 
 module.exports = (client) => {}
 
-module.exports.addWin = async (guildId, userId) => {
+module.exports.addWin = async (guildId, userId, number) => {
     const result = await profileSchema.findOneAndUpdate(
       {
         guildId,
@@ -12,7 +12,7 @@ module.exports.addWin = async (guildId, userId) => {
         guildId,
         userId,
         $inc: {
-          win: 1,
+          win: number,
           loss: 0,
         },
       },
@@ -25,7 +25,7 @@ module.exports.addWin = async (guildId, userId) => {
     return result.win
 } 
 
-module.exports.addLoss = async (guildId, userId) => {
+module.exports.addLoss = async (guildId, userId, number) => {
     const result = await profileSchema.findOneAndUpdate(
     {
         guildId,
@@ -36,7 +36,7 @@ module.exports.addLoss = async (guildId, userId) => {
         userId,
         $inc: {
         win: 0,
-        loss: 1,
+        loss: number,
         },
     },
     {
