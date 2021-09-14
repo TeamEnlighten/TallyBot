@@ -16,7 +16,7 @@ module.exports = {
         let minus = arr[1].toLowerCase()
         let number = arr[2]
 
-            if (number === NaN) {
+            if (!Number.isInteger(number)) {
                 message.channel.send('Please insert the number of Wins/Losses you would like to retract.')
                 return
             }
@@ -59,7 +59,7 @@ module.exports = {
 
             message.channel.send(lossEmbed)
         } else {
-            
+
             message.channel.send('Please enter win or loss only!')
             return
         }
