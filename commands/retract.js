@@ -59,6 +59,7 @@ module.exports = {
 
             message.channel.send(lossEmbed)
         } else {
+            
             message.channel.send('Please enter win or loss only!')
             return
         }
