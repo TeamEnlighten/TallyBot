@@ -14,14 +14,6 @@ module.exports = {
         let command = message.content.substring(message.content.indexOf(" ") + 1, message.content.length);
         let arr = command.split(' ')
         let minus = arr[1].toLowerCase()
-
-        console.log(minus)
-
-            if (minus !== 'win' || minus !== 'loss') {
-                message.channel.send('Please enter win or loss only!')
-                return
-            } 
-
         let number = arr[2]
 
             if (number === NaN) {
@@ -54,9 +46,7 @@ module.exports = {
 
             message.channel.send(winEmbed)
 
-        } 
-
-        if (minus === 'loss') {
+        } else if (minus === 'loss') {
             number = `-${number}`
             const totalLoss = await tally.addLoss(guildId, userId, number)
 
@@ -68,6 +58,10 @@ module.exports = {
             .setTimestamp()
 
             message.channel.send(lossEmbed)
-        }     
+        } else {
+            message.channel.send('Please enter win or loss only!')
+            return
+        }
+          
     }
 }
