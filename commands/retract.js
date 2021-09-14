@@ -15,7 +15,7 @@ module.exports = {
         let arr = command.split(' ')
         let minus = arr[1].toLowerCase()
 
-        console.log(arr)
+        console.log(minus)
 
             if (minus !== 'win' || minus !== 'loss') {
                 message.channel.send('Please enter win or loss only!')
