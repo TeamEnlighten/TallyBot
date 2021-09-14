@@ -13,7 +13,7 @@ module.exports = {
 
         let command = message.content.substring(message.content.indexOf(" ") + 1, message.content.length);
 
-        let minus = command[1].toLowerCase()
+        let minus = command[2].toLowerCase()
 
         console.log(minus)
 
@@ -22,7 +22,7 @@ module.exports = {
                 return
             } else {
 
-        let number = command[2]
+        let number = command[3]
 
             if (number === NaN) {
                 message.channel.send('Please insert the number of Wins/Losses you would like to retract.')
