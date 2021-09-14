@@ -15,10 +15,12 @@ module.exports = {
 
         let minus = command[1].toLowerCase()
 
+        console.log(minus)
+
             if (minus !== 'win' || minus !== 'loss') {
                 message.channel.send('Please enter win or loss only!')
                 return
-            }
+            } else {
 
         let number = command[2]
 
@@ -67,7 +69,7 @@ module.exports = {
 
             message.channel.send(lossEmbed)
         }
-
+    }
           
     }
 }
