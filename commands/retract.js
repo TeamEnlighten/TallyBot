@@ -36,7 +36,6 @@ module.exports = {
         if (minus === 'win') {
             number = `-${number}`
             const totalWin = await tally.addWin(guildId, userId, number)
-
             const winEmbed = new Discord.MessageEmbed()
             .setTitle('Win Retracted!')
             .setAuthor(`${targ}`, targ1)
@@ -49,7 +48,6 @@ module.exports = {
         } else if (minus === 'loss') {
             number = `-${number}`
             const totalLoss = await tally.addLoss(guildId, userId, number)
-
             const lossEmbed = new Discord.MessageEmbed()
             .setTitle('Loss Retracted!')
             .setAuthor(`${targ}`, targ1)
@@ -59,10 +57,8 @@ module.exports = {
 
             message.channel.send(lossEmbed)
         } else {
-
             message.channel.send('Please enter win or loss only!')
             return
-        }
-          
+        }     
     }
 }
