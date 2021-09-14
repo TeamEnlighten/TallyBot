@@ -12,17 +12,17 @@ module.exports = {
     callback: async (message) => {
 
         let command = message.content.substring(message.content.indexOf(" ") + 1, message.content.length);
+        let arr = command.split(' ')
+        let minus = arr[1].toLowerCase()
 
-        let minus = command[2].toLowerCase()
-
-        console.log(minus)
+        console.log(arr)
 
             if (minus !== 'win' || minus !== 'loss') {
                 message.channel.send('Please enter win or loss only!')
                 return
-            } else {
+            } 
 
-        let number = command[3]
+        let number = arr[2]
 
             if (number === NaN) {
                 message.channel.send('Please insert the number of Wins/Losses you would like to retract.')
@@ -68,8 +68,6 @@ module.exports = {
             .setTimestamp()
 
             message.channel.send(lossEmbed)
-        }
-    }
-          
+        }     
     }
 }
