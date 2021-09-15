@@ -76,3 +76,24 @@ module.exports.getLoss = async (guildId, userId) => {
 
     return loss
 }
+
+module.exports.resetScore = async (guildId, userId) => {
+  const result = await profileSchema.findOneAndUpdate(
+    {
+        guildId,
+        userId,
+    },
+    {
+        guildId,
+        userId,
+        win: 0,
+        loss: 0,
+    },
+    {
+        upsert: true,
+        new: true,
+    }
+    )
+
+    return result
+} 

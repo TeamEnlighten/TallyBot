@@ -2,9 +2,9 @@ const tally = require('../tally')
 const Discord = require('discord.js')
 
 module.exports = {
-    commands: ['retract', 'r'],
-    aliases: ['r'],
-    description: "Adds a Win to the Members score!",
+    commands: ['void', 'v'],
+    aliases: ['v'],
+    description: "Voids a Win / Loss from the Members score!",
     minArgs: 3,
     maxArgs: 3,
     permissions: ['ADMINISTRATOR'],
