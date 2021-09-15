@@ -15,8 +15,7 @@ module.exports = {
         let arr = command.split(' ')
         let minus = arr[1].toLowerCase()
         let number = arr[2]
-        Number(number)
-        console.log(number)
+        number = Number(number)
 
             if (!Number.isInteger(number) || number <= 0) {
                 message.channel.send('Please insert the number of Wins/Losses you would like to retract.')
