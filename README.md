@@ -15,11 +15,13 @@ Please read through comments in code and adjust as necessary!
 
 **Commands:**
 
- Score - Shows your current Wins and Losses
+Win - Adds a Win to the mentioned users score. (Requires Manage_Messages permission)
 
- Win - Adds a Win to the mentioned user
+Loss - Adds a Loss to the mentioned users score. (Requires Manage_Messages permission)
 
- Loss - Adds a Loss to the mentioned user
+Reset - Sets mentioned users score to 0 (Requires Administrator permission)
+
+Void - Will void any number of Wins/Losses from mentioned users score (Requires Administrator permission)
 
 **If you want to donate:**
 
