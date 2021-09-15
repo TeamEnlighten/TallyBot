@@ -15,6 +15,8 @@ Please read through comments in code and adjust as necessary!
 
 **Commands:**
 
+Score - Shows your current Wins and Losses or mentioned users.
+
 Win - Adds a Win to the mentioned users score. (Requires Manage_Messages permission)
 
 Loss - Adds a Loss to the mentioned users score. (Requires Manage_Messages permission)
