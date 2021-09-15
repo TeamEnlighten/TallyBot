@@ -16,6 +16,8 @@ module.exports = {
         let minus = arr[1].toLowerCase()
         let number = arr[2]
 
+        console.log(number)
+
             if (!Number.isInteger(number)) {
                 message.channel.send('Please insert the number of Wins/Losses you would like to retract.')
                 return
