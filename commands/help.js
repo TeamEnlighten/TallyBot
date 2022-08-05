@@ -1,56 +1,26 @@
-const loadCommands = require('./load-commands')
-const Discord = require('discord.js');
+const Discord = require('discord.js')
 
 module.exports = {
-  commands: ['help', 'h'],
-  aliases: ['h'],
-  description: "List of this bot's commands",
-  callback: (message) => {
+    category: 'Tally',
+    description: "Displays all commands.",
+    slash: true,
+    testOnly: false,
+    callback: ({interaction }) => {
 
-    let reply = ''
-    const commands = loadCommands()
+        const embed = new Discord.MessageEmbed()
+        .setTitle('Command Menu')
+        .setColor('WHITE')
+        .addFields(
+            { name: '__Loss__', value: '**Description:** Adds a Loss to the Members score.\n**Syntax:** <@user>', inline: false },
+            { name: '__Reset__', value: '**Description:** Resets a Members score.\n**Syntax:** <@user>', inline: false },
+            { name: '__Score__', value: `**Description:** Show the Current Members score.\n**Syntax:** <@user>`, inline: false},
+            { name: '__Void__', value: `**Description:** Voids a Win / Loss from the Members score.\n**Syntax:** <@user> <win or loss> <#>`, inline: false },
+            { name: '__Win__', value: '**Description:** Adds a Win to the Members score.\n**Syntax:** <@user>', inline: false },
+        )
 
-    for (const command of commands) {
-      // Check for permissions
-      let permissions = command.permission
-
-      if (permissions) {
-        let hasPermission = true
-        if (typeof permissions === 'string') {
-          permissions = [permissions]
-        }
-
-        for (const permission of permissions) {
-          if (!message.member.hasPermission(permission)) {
-            hasPermission = false
-            break
-          }
-        }
-
-        if (!hasPermission) {
-          continue
-        }
-      }
-
-      // Format the text
-      const mainCommand =
-        typeof command.commands === 'string'
-          ? command.commands
-          : command.commands[0]
-      const args = command.expectedArgs ? ` ${command.expectedArgs}` : ''
-      const { description } = command
-      const {aliases} = command
-
-     reply += `**${mainCommand}${args}**\n ${description}\n [aliases: ${aliases}]\n\n` 
+        interaction.reply({
+            embeds: [embed],
+            ephemeral: true,
+        }) 
     }
-
-    const embed = new Discord.MessageEmbed()
-    .setTitle('Help Menu')
-    .setColor('RANDOM')
-    .setDescription(reply)
-
-     //message.author.send(embed)  // will DM the help embed
-     message.channel.send(embed)   // sends help embed in channel that message was sent
- 
-  },
 }

@@ -1,65 +1,101 @@
 const tally = require('../tally')
-const Discord = require('discord.js')
+const Discord = require('discord.js');
 
 module.exports = {
-    commands: ['void', 'v'],
-    aliases: ['v'],
+    category: 'Tally',
     description: "Voids a Win / Loss from the Members score!",
-    minArgs: 3,
-    maxArgs: 3,
+    slash: true,
+    testOnly: false,
+    minArgs: 2,
+    maxArgs: 2,
     permissions: ['ADMINISTRATOR'],
     expectedArgs: "<@user> <win or loss> <#>",
-    callback: async (message) => {
 
-        let command = message.content.substring(message.content.indexOf(" ") + 1, message.content.length);
-        let arr = command.split(' ')
-        let minus = arr[1].toLowerCase()
-        let number = arr[2]
-        number = Number(number)
+    options: [
+        {
+          name: 'member',
+          description: 'Choose Member to Void Score.',
+          required: true,
+          type: Discord.Constants.ApplicationCommandOptionTypes.USER,
+        },
+        {
+          name: 'type',
+          description: "Choose Win or Loss",
+          required: true,
+          type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
+          choices: [
+            {value: 'win', name: 'Win'}, 
+            {value: 'loss', name: 'Loss'},
+          ],
+        },
+    ],
 
-            if (!Number.isInteger(number) || number <= 0) {
-                message.channel.send('Please insert the number of Wins/Losses you would like to retract.')
-                return
-            }
+    callback: async ({ interaction, guild }) => {
 
-        let target = message.mentions.users.first()
-            if (!target) { 
-                message.channel.send('Please mention the user!')
-                return
-            } else {target = message.mentions.members.first().user.id}
+        let target = interaction.options.getUser('member')
+        let targ =  target.username
+        let targ1 =  target.displayAvatarURL({ format: 'png', size: 256, dynamic: true })
+        let type = interaction.options.getString('type') 
+        let number = 1
 
-        let targ =  message.mentions.members.first().user.username
-        let targ1 =  message.mentions.members.first().user.displayAvatarURL({ format: 'png', size: 256, dynamic: true })
+        const guildId = guild.id
+        const userId = target.id
+        const wins = await tally.getWin(guildId, userId)
+        const losses = await tally.getLoss(guildId, userId)
 
-        const guildId = message.guild.id
-        const userId = target
+        if (type === 'win' && wins === 0) {
+            interaction.reply({
+                content: 'You cannot Void any more Wins. Score is now 0.',
+                ephemeral: true,
+            })
 
-        if (minus === 'win') {
-            number = `-${number}`
-            const totalWin = await tally.addWin(guildId, userId, number)
-            const winEmbed = new Discord.MessageEmbed()
-            .setTitle('Win Retracted!')
-            .setAuthor(`${targ}`, targ1)
-            .setColor('RANDOM')
-            .setDescription(`${targ}, your score has been updated! \n\nYou now have ${totalWin} wins.`)
-            .setTimestamp()
-
-            message.channel.send(winEmbed)
-
-        } else if (minus === 'loss') {
-            number = `-${number}`
-            const totalLoss = await tally.addLoss(guildId, userId, number)
-            const lossEmbed = new Discord.MessageEmbed()
-            .setTitle('Loss Retracted!')
-            .setAuthor(`${targ}`, targ1)
-            .setColor('RANDOM')
-            .setDescription(`${targ}, your score has been updated! \n\nYou now have ${totalLoss} losses.`)
-            .setTimestamp()
-
-            message.channel.send(lossEmbed)
-        } else {
-            message.channel.send('Please enter win or loss only!')
             return
-        }     
+        }
+
+        if (type === 'loss' && losses === 0) {
+            interaction.reply({
+                content: 'You cannot Void any more Losses. Score is now 0.',
+                ephemeral: true,
+            })
+
+            return
+        }
+  
+            if (type === 'win') {
+                number = `-${number}`
+                const totalWin = await tally.addWin(guildId, userId, number)
+                const winEmbed = new Discord.MessageEmbed()
+                .setTitle('Win Retracted!')
+                .setThumbnail(`${targ1}`)
+                .setColor('BLUE')
+                .setDescription(`${targ}, your score has been updated! \n\nYou now have ${totalWin} wins.`)
+                .setTimestamp()
+    
+                interaction.reply({
+                    embeds: [winEmbed],
+                    ephemeral: false,
+                    }) 
+    
+            } else if (type === 'loss') {
+                number = `-${number}`
+                const totalLoss = await tally.addLoss(guildId, userId, number)
+                const lossEmbed = new Discord.MessageEmbed()
+                .setTitle('Loss Retracted!')
+                .setThumbnail(`${targ1}`)
+                .setColor('PURPLE')
+                .setDescription(`${targ}, your score has been updated! \n\nYou now have ${totalLoss} losses.`)
+                .setTimestamp()
+    
+                interaction.reply({
+                    embeds: [lossEmbed],
+                    ephemeral: false,
+                    }) 
+            } else {
+                interaction.reply({
+                    text: 'Something went Wrong! Report to Bot Owner.',
+                    ephemeral: true
+                 })
+            }
+          
     }
 }
