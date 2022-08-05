@@ -1,0 +1,10 @@
+{
+    "token": "insert here",
+    "mongoPath": "insert here",
+    "activity": {
+        "game": " over the Score.",
+        "play": " only the Best games!",
+        "listen": " to the waves..."
+
+       } 
+}
