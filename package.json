@@ -11,8 +11,9 @@
   "author": "enlighten1self",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^12.5.1",
+    "discord.js": "^13.6.0",
     "fs": "0.0.1-security",
-    "mongoose": "^5.11.11"
+    "mongoose": "^6.1.6",
+    "wokcommands": "^1.5.3"
   }
 }

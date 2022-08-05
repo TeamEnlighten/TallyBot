@@ -2,38 +2,54 @@ const tally = require('../tally')
 const Discord = require('discord.js')
 
 module.exports = {
-    commands: ['loss', 'l'],
-    aliases: ['l'],
+    category: 'Tally',
     description: "Adds a Loss to the Members score!",
+    slash: true,
+    testOnly: false,
     minArgs: 1,
     maxArgs: 1,
     permissions: ['MANAGE_MESSAGES'],
     expectedArgs: "<@user>",
-    callback: async (message) => {
 
-        let target = message.mentions.users.first()
-            if (!target) { 
-                message.channel.send('Please mention the Loser!')
-                return
-            } else {target = message.mentions.members.first().user.id}
+    options: [
+        {
+          name: 'member',
+          description: 'Choose Member to add Loss.',
+          required: true,
+          type: Discord.Constants.ApplicationCommandOptionTypes.USER,
+        },
+    ],
 
-        let targ =  message.mentions.members.first().user.username
-        let targ1 =  message.mentions.members.first().user.displayAvatarURL({ format: 'png', size: 256, dynamic: true })
+    callback: async ({ interaction, guild }) => {
 
-        const guildId = message.guild.id
-        const userId = target
+        let target = interaction.options.getUser('member')
+
+        let targ =  target.username
+        let targ1 =  target.displayAvatarURL({ format: 'png', size: 256, dynamic: true })
+
+        const guildId = guild.id
+        const userId = target.id
         const number = 1
 
         const totalLoss = await tally.addLoss(guildId, userId, number)
+        let lossText;
 
-            const lossEmbed = new Discord.MessageEmbed()
-            .setTitle('You Lost!')
-            .setAuthor(`${targ}`, targ1)
-            .setColor('RANDOM')
-            .setDescription(`${targ}, your loss has been recorded! \n\n You now have ${totalLoss} losses.`)
-            .setTimestamp()
+        if (totalLoss === 1) {
+            lossText = 'loss'
+        } else { lossText = 'losses'}
 
-            message.channel.send(lossEmbed)
+        const lossEmbed = new Discord.MessageEmbed()
+        .setTitle('You Lost!')
+        //.setAuthor({text: targ, iconURL:targ1})
+        .setColor('RED')
+        .setThumbnail(`${targ1}`)
+        .setDescription(`**${targ}**, your loss has been recorded! \n\n You now have ${totalLoss} ${lossText}.`)
+        .setTimestamp()
+
+        interaction.reply({
+            embeds: [lossEmbed],
+            ephemeral: false,
+            })  
           
     }
 }

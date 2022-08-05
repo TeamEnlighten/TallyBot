@@ -1,7 +1,7 @@
 {
-    "token": "<insert token here>",
+    "token": "Nzk4MzU4NTczNTgyOTA5NTAw.X_z3XA.ms3XlX_65MuwSOwq6KSUvJWfvpI",
     "prefix": ";",
-    "mongoPath": "<insert your mongoDB path>.",
+    "mongoPath": "mongodb+srv://teamenlighten:k81993@typenull.7oy1f.mongodb.net/typenull",
     "activity": {
         "game": " over the Score.",
         "play": " only the Best games!",
