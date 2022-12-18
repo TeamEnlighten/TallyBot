@@ -1,32 +1,23 @@
 const tally = require('../tally')
-const Discord = require('discord.js')
+const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
-    category: 'Tally',
-    description: "Adds a Win to the Members score!",
-    slash: true,
-    testOnly: false,
-    minArgs: 1,
-    maxArgs: 1,
-    permissions: ['MANAGE_MESSAGES'],
-    expectedArgs: "<@user>",
-
-    options: [
-        {
-          name: 'member',
-          description: 'Choose Member to add Win.',
-          required: true,
-          type: Discord.Constants.ApplicationCommandOptionTypes.USER,
-        },
-    ],
-
-    callback: async ({ interaction, guild }) => {
-
+	data: new SlashCommandBuilder()
+		.setName('win')
+		.setDescription('Adds a Win to the Members score!')
+        .addUserOption(option => 
+            option.setName('member')
+                .setDescription('Choose Member to add Win.')
+                .setRequired(true))
+        .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
+	async execute(interaction) {
         let target = interaction.options.getUser('member')
 
         let targ =  target.username
         let targ1 =  target.displayAvatarURL({ format: 'png', size: 256, dynamic: true })
-
+        
+        const guild = interaction.guild
         const guildId = guild.id
         const userId = target.id
         const number = 1
@@ -38,9 +29,9 @@ module.exports = {
             winText = 'win'
         } else { winText = 'wins'}
 
-        const winEmbed = new Discord.MessageEmbed()
+        const winEmbed = new EmbedBuilder()
         .setTitle('You Won!')
-        .setColor('GREEN')
+        .setColor('00FF00')
         .setThumbnail(`${targ1}`)
         .setDescription(`**${targ}**, your win has been recorded! \n\n You now have ${totalWin} ${winText}.`)
         .setTimestamp()

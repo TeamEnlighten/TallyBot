@@ -1,43 +1,32 @@
 const tally = require('../tally')
-const Discord = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
-    category: 'Tally',
-    description: "Voids a Win / Loss from the Members score!",
-    slash: true,
-    testOnly: false,
-    minArgs: 2,
-    maxArgs: 2,
-    permissions: ['ADMINISTRATOR'],
-    expectedArgs: "<@user> <win or loss> <#>",
-
-    options: [
-        {
-          name: 'member',
-          description: 'Choose Member to Void Score.',
-          required: true,
-          type: Discord.Constants.ApplicationCommandOptionTypes.USER,
-        },
-        {
-          name: 'type',
-          description: "Choose Win or Loss",
-          required: true,
-          type: Discord.Constants.ApplicationCommandOptionTypes.STRING,
-          choices: [
-            {value: 'win', name: 'Win'}, 
-            {value: 'loss', name: 'Loss'},
-          ],
-        },
-    ],
-
-    callback: async ({ interaction, guild }) => {
-
+	data: new SlashCommandBuilder()
+		.setName('void')
+		.setDescription('Voids a Win / Loss from the Members score.')
+        .addUserOption(option => 
+            option.setName('member')
+                .setDescription('Choose Member to Void Score.')
+                .setRequired(true))
+        .addStringOption(option => 
+            option.setName('type')
+                .setDescription('Choose Win or Loss.')
+                .setRequired(true)
+                .addChoices(
+                    {name: 'Win', value: 'win'}, 
+                    {name: 'Loss', value: 'loss'},
+                ))
+        .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
+	async execute(interaction) {
         let target = interaction.options.getUser('member')
         let targ =  target.username
         let targ1 =  target.displayAvatarURL({ format: 'png', size: 256, dynamic: true })
         let type = interaction.options.getString('type') 
         let number = 1
 
+        const guild = interaction.guild
         const guildId = guild.id
         const userId = target.id
         const wins = await tally.getWin(guildId, userId)
@@ -64,10 +53,10 @@ module.exports = {
             if (type === 'win') {
                 number = `-${number}`
                 const totalWin = await tally.addWin(guildId, userId, number)
-                const winEmbed = new Discord.MessageEmbed()
+                const winEmbed = new EmbedBuilder()
                 .setTitle('Win Retracted!')
                 .setThumbnail(`${targ1}`)
-                .setColor('BLUE')
+                .setColor('0000FF')
                 .setDescription(`${targ}, your score has been updated! \n\nYou now have ${totalWin} wins.`)
                 .setTimestamp()
     
@@ -79,10 +68,10 @@ module.exports = {
             } else if (type === 'loss') {
                 number = `-${number}`
                 const totalLoss = await tally.addLoss(guildId, userId, number)
-                const lossEmbed = new Discord.MessageEmbed()
+                const lossEmbed = new EmbedBuilder()
                 .setTitle('Loss Retracted!')
                 .setThumbnail(`${targ1}`)
-                .setColor('PURPLE')
+                .setColor('6a0dad')
                 .setDescription(`${targ}, your score has been updated! \n\nYou now have ${totalLoss} losses.`)
                 .setTimestamp()
     

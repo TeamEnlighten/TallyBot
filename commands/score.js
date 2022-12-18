@@ -1,27 +1,16 @@
 const tally = require('../tally')
-const Discord = require('discord.js')
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-    category: 'Tally',
-    description: "Show the Current Members Score!",
-    slash: true,
-    testOnly: false,
-    minArgs: 0,
-    maxArgs: 1,
-    permissions: ['MANAGE_MESSAGES'],
-    expectedArgs: "<@user>",
-
-    options: [
-        {
-          name: 'member',
-          description: 'Choose Member to show Score.',
-          required: false,
-          type: Discord.Constants.ApplicationCommandOptionTypes.USER,
-        },
-    ],
-
-    callback: async ({ interaction, guild }) => {
-
+	data: new SlashCommandBuilder()
+		.setName('score')
+		.setDescription('Show the Current Members Score!')
+        .addUserOption(option => 
+            option.setName('member')
+                .setDescription('Choose Member to show Score.')
+                .setRequired(false))
+        .setDMPermission(false),
+	async execute(interaction) {
         let target = interaction.options.getUser('member')
         let targName;
             if (!target) { 
@@ -29,16 +18,16 @@ module.exports = {
                 targName = "Your"
             } else {targName = `${target.username}'s` }
         let targ1 =  target.displayAvatarURL({ format: 'png', size: 256, dynamic: true })
-
+        
+        const guild = interaction.guild
         const guildId = guild.id
         const userId = target.id
         const wins = await tally.getWin(guildId, userId)
         const losses = await tally.getLoss(guildId, userId)
 
-        const scoreEmbed = new Discord.MessageEmbed()
+        const scoreEmbed = new EmbedBuilder()
         .setTitle(`__${targName} Score__`)
-        //.setAuthor({text: targ, iconURL:targ1})
-        .setColor('ORANGE')
+        .setColor('FFA500')
         .setThumbnail(`${targ1}`)
         .setDescription(`Wins: ${wins} | Losses: ${losses}`)
         .setTimestamp()

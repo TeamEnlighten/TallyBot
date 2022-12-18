@@ -1,9 +1,0 @@
-{
-    "token": "<insert token here>",
-    "mongoPath": "<insert your mongoDB path>",
-    "activity": {
-        "game": " over the Score.",
-        "play": " only the Best games!",
-        "listen": " to the waves..."
-       } 
-}
