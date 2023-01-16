@@ -3,9 +3,14 @@ const { ActivityType, Client, Collection, GatewayIntentBits, Routes } = require(
 const client = new Client({
   intents: [
       GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMembers,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.GuildMessageReactions,
+      GatewayIntentBits.GuildEmojisAndStickers,
   ]
 })
 const mongoose = require('mongoose');
+mongoose.set('strictQuery', false);
 const fs = require('node:fs');
 const path = require('path');
 const tally = require('./tally');
@@ -25,7 +30,8 @@ for (const file of commandFiles) {
 
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
-client.once('ready', async () => {
+client.on('ready', async () => {
+
   try {
 		console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
@@ -41,26 +47,26 @@ client.once('ready', async () => {
 
   console.log(`${client.user.tag} is keeping score!`)
 
+  tally(client)
+
+  await mongoose.connect(
+    process.env.DB || '', 
+    {
+        keepAlive: true,
+    }
+  )
+
   client.user.setPresence({ 
     activities: [{ 
       name: process.env.WATCHING, //WATCHING, PLAYING , LISTENING
       type: ActivityType.Watching //Watching, Playing, Listening (Also Streaming & Competing )
     }],
     status: 'online' });
-
-    await mongoose.connect(
-      process.env.DB || '', 
-      {
-          keepAlive: true,
-      }
-    )
-});
-
+  
+})
 
 client.on('interactionCreate', async interaction => {
-	if (!interaction.isChatInputCommand()) return;
-
-  tally(client)
+  if (!interaction.isChatInputCommand()) return;
 
   const command = client.commands.get(interaction.commandName);
 

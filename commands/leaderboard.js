@@ -7,11 +7,9 @@ module.exports = {
 		.setDescription('Shows the Top 10 in your guild!')
         .setDMPermission(false),
 	async execute(interaction) {
-        const guildId = interaction.guild.id
-        const data = await scoreData.find(guildId)
-
-        console.log(data)
-
+        const guild = interaction.guild
+        const data = await scoreData.find({ guildId: guild.id })
+	
         if (!data) {
             const lbembed = new EmbedBuilder()
               .setTitle(`Failed!`)
